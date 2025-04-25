@@ -11,12 +11,14 @@
 
 #define MAX_LINE 1024
 /* Parser */
-void parse_line(char *line,char** args);
+int parse_line(char *line,char** args, char** piped_args);
+void parse_command(char* line, char** args);
 
 /* Executer */
 int is_builtin(char* cmd);
 void execute_builtin(char** args);
 void execute_command(char** args);
+void execute_pipeline(char** args1, char** args2);
 
 /* Signal Handler */
 void setup_signal_handlers();

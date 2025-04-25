@@ -5,8 +5,10 @@ int main(){
     setup_signal_handlers();
     char line[MAX_LINE];
     char* args[MAX_LINE/2 + 1];
+    char* piped_args[MAX_LINE/2 + 1];
     int should_run = 1;
 
+    // Welcome screen
     printf("\n"
         "██╗      █████╗ ███████╗██╗   ██╗    ███████╗██╗  ██╗███████╗██╗     ██╗     \n"
         "██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝    ██╔════╝██║  ██║██╔════╝██║     ██║     \n"
@@ -16,6 +18,7 @@ int main(){
         "╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝       ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n"
         "\n");
 
+    // Main Loop
     while (should_run)
     {
         printf("Lazy shell $ ");
@@ -25,7 +28,12 @@ int main(){
             break;
         }
 
-        parse_line(line, args);
+        if(parse_line(line, args, piped_args)){
+            execute_pipeline(args, piped_args);
+        }
+        else{
+            execute_command(args);
+        }
         
         if(args[0] == NULL){
             continue;
