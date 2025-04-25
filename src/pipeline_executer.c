@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 void execute_pipeline(char** args1, char** args2){
     int pipefd[2];

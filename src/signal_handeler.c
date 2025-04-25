@@ -1,8 +1,9 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 volatile sig_atomic_t foreground_only = 0;
 
 void sigint_handler(int sig) {
+    (void)sig;
     printf("\n"); 
 }
 

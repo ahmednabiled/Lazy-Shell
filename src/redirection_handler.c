@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 void handle_redirection(char** args){
     int i;

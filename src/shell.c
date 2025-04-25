@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 
 int main(){
@@ -21,6 +21,7 @@ int main(){
     // Main Loop
     while (should_run)
     {
+        check_jobs();
         printf("Lazy shell $ ");
         fflush(stdout);
 
@@ -31,26 +32,18 @@ int main(){
         if(parse_line(line, args, piped_args)){
             execute_pipeline(args, piped_args);
         }
-        else{
-            execute_command(args);
+        else if(parse_command(line, args)){
+            if(strcmp(args[0], "exit") == 0){
+                should_run = 0;
+            }
+            else{
+                execute_command(args);
+            }
         }
-        
-        if(args[0] == NULL){
+        else if(args[0] == NULL){
             continue;
         }
-
-        if(strcmp(args[0], "exit") == 0){
-            should_run = 0;
-        }
-        else if(is_builtin(args[0])){
-            execute_builtin(args);
-        }
-        else{
-            execute_command(args);
-        }
-
     }
     return 0;
-
 }
 

@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 typedef struct {
     pid_t pid;
@@ -50,6 +50,7 @@ void add_job(pid_t pid, char *cmd, int foreground){
         }
         else{
             printf("[%d] %d %s\n", jobs[i].job_id, pid, cmd);
+            check_jobs();
         }
         return;
     }

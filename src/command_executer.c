@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 int is_builtin(char* cmd){
     return strcmp(cmd, "cd") == 0 ||
@@ -28,7 +28,7 @@ void execute_builtin(char** args){
 }
 
 void execute_command(char** args){
-    int foreground;
+    int foreground = 1;
     int i;
     pid_t pid;
 
@@ -37,7 +37,7 @@ void execute_command(char** args){
         foreground = 0;
         args[i-1] = NULL;
     }
-    
+
     pid = fork();
     
     if(pid == -1){

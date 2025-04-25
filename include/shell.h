@@ -12,7 +12,7 @@
 #define MAX_LINE 1024
 /* Parser */
 int parse_line(char *line,char** args, char** piped_args);
-void parse_command(char* line, char** args);
+int parse_command(char* line, char** args);
 
 /* Executer */
 int is_builtin(char* cmd);

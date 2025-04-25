@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "../include/shell.h"
 
 int parse_line(char *line, char** args, char** piped_args) {
     char* pipe_pos = strchr(line, '|');
@@ -8,15 +8,18 @@ int parse_line(char *line, char** args, char** piped_args) {
         parse_command(pipe_pos+1, piped_args);
         return 1;
     }
-    parse_command(line, args);
     return 0;
 }
 
 
-void parse_command(char* cmd, char** args){
+int parse_command(char* cmd, char** args){
     char *token;
     int i = 0;
     token = strtok(cmd, " \t\n\r");
+    
+    if(token == NULL){
+        return 0;
+    }
     
     while(token && i < MAX_LINE/2){
         args[i] = token;
@@ -24,5 +27,6 @@ void parse_command(char* cmd, char** args){
         i++;
     }
     args[i] = NULL;
+    return 1;
 }
 
