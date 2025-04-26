@@ -39,29 +39,36 @@ void execute_command(char** args){
     }
 
     pid = fork();
-    
-    if(pid == -1){
-        perror("fork failed");
+    if (pid < 0) {
+        perror("fork");
         return;
     }
-    else if( pid == 0){
+
+    if (pid == 0) {
+        signal(SIGINT,  SIG_DFL);
+        signal(SIGTSTP, SIG_DFL);
+
         handle_redirection(args);
-        if(execvp(args[0], args)){
-            perror("execvp failed");
-            exit(EXIT_FAILURE);
-        }
+        execvp(args[0], args);
+        perror("execvp failed");
+        exit(EXIT_FAILURE);
     }
-    else{
-        if(foreground) {
+    else {
+        if (foreground) {
             int status;
             waitpid(pid, &status, WUNTRACED);
 
-            if(WIFSTOPPED(status)) {
-                add_job(pid, args[0], 0);  
+            if (WIFSTOPPED(status)) {
+                printf("\n[%d]   Stopped   %s\n", pid, args[0]);
+                add_job(pid, args[0], 0);
             }
-        } 
+            else {
+                check_jobs();
+            }
+        }
         else {
-            add_job(pid, args[0], 1);  
+            
+            add_job(pid, args[0], 0);
         }
     }
 }
