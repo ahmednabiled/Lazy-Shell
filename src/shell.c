@@ -33,10 +33,13 @@ int main(){
             execute_pipeline(args, piped_args);
         }
         else if(parse_command(line, args)){
-            if(strcmp(args[0], "exit") == 0){
+            if (strcmp(args[0], "exit") == 0) {
                 should_run = 0;
             }
-            else{
+            else if (is_builtin(args[0])) {
+                execute_builtin(args);
+            }
+            else {
                 execute_command(args);
             }
         }
