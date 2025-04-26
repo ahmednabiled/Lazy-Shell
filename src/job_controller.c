@@ -34,24 +34,26 @@ void check_jobs(){
 
 
 
-void add_job(pid_t pid, char *cmd, int is_background) {
-    for(int i = 0; i < 100; i++) {
-        if(jobs[i].pid == 0) {
+void add_job(pid_t pid, char *cmd, int foreground){
+    int i;
+    for(i = 0; i < 100; i++){
+        if(jobs[i].pid == 0){
             jobs[i].pid = pid;
             jobs[i].cmd = strdup(cmd);
-            if (!jobs[i].cmd) {
-                perror("strdup failed");
-                return;
-            }
             jobs[i].job_id = next_job_id++;
-            jobs[i].status = is_background ? 0 : 1; 
-            
-            if(is_background) {
-                printf("[%d] %d %s\n", jobs[i].job_id, pid, cmd);
-            }
-            return;
+            jobs[i].status = 0;
         }
+        if(foreground){
+            printf("[%d] %d %s\n", jobs[i].job_id, pid, cmd);
+            waitpid(pid, NULL, WUNTRACED);
+            check_jobs();
+        }
+        else{
+            printf("[%d] %d %s\n", jobs[i].job_id, pid, cmd);
+            check_jobs();
+        }
+        return;
     }
-    fprintf(stderr, "Maximum jobs limit reached\n");
+    printf("Maximum jobs limit reached");
 }
 

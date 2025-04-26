@@ -52,16 +52,6 @@ void execute_command(char** args){
         }
     }
     else{
-        if(foreground) {
-            int status;
-            waitpid(pid, &status, WUNTRACED);
-
-            if(WIFSTOPPED(status)) {
-                add_job(pid, args[0], 0);  
-            }
-        } 
-        else {
-            add_job(pid, args[0], 1);  
-        }
+        add_job(pid, args[0], foreground);
     }
 }
